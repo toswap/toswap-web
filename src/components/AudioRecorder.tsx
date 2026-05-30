@@ -77,6 +77,8 @@ export default function AudioRecorder({ isRecording, onStop }: Props) {
       mr.start()
       mediaRecorderRef.current = mr
     }).catch(() => {
+      // 마이크 권한 거부 등 — 빈 blob 대신 null을 전달할 수 없으므로 크기 0으로 표시
+      // submit 측에서 size === 0 체크로 에러 처리
       if (!cancelled) onStopRef.current(new Blob([], { type: 'audio/webm' }))
     })
 

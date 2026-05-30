@@ -7,17 +7,14 @@ import axios from 'axios'
  */
 const apiClient = axios.create({
   baseURL: '/api',
-  withCredentials: true,   // 쿠키(JWT refresh token) 포함
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  withCredentials: true,
 })
 
-// 응답 인터셉터 — 인증 만료 처리
+// 응답 인터셉터 — 인증 만료 처리 (로그인 페이지에서는 리다이렉트 안 함)
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && window.location.pathname !== '/') {
       window.location.href = '/'
     }
     return Promise.reject(error)
